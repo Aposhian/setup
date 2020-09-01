@@ -43,7 +43,8 @@ apt-get install -yqq \
 	zsh \
 	curl \
 	gnome-tweaks \
-	net-tools
+	net-tools \
+	dos2unix
 
 ################
 #### Python ####
