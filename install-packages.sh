@@ -169,6 +169,13 @@ apt-get install -yqq \
 	docker-ce-cli \
 	containerd.io
 
+# Make it so docker does not need sudo
+# https://docs.docker.com/engine/install/linux-postinstall/#manage-docker-as-a-non-root-user
+
+groupadd docker
+
+usermod -aG docker $USER
+
 else
 echo "Docker already installed"
 
