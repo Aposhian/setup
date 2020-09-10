@@ -93,6 +93,11 @@ sudo -Hiu $USER nvm install node
 
 sudo -Hiu $USER nvm use node
 
+if [ -z $(grep 'npm-completion' $PROFILE) ]
+then
+npm completion >> $PROFILE
+fi
+
 else
 echo "Node.js Version Manager already installed"
 
