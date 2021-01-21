@@ -1,4 +1,4 @@
 #!/bin/sh
 
-# Map Right Alt to dead_greek for compose
-xmodmap -e 'keycode 108 = dead_greek Meta_R Alt_R Meta_R'
+# Map F9 to dead_greek
+echo "xmodmop -e 'keysym F9 = dead_greek dead_greek dead_greek dead_greek'" >> ~/.bashrc
