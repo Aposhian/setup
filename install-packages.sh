@@ -44,7 +44,8 @@ apt-get install -yqq \
 	curl \
 	gnome-tweaks \
 	net-tools \
-	dos2unix
+	dos2unix \
+	ubuntu-restricted-extras
 
 ################
 #### Python ####
