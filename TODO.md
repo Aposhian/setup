@@ -1,0 +1,30 @@
+- .zshrc and .bashrc
+- oh my zsh installation
+- driver installs?
+- graphics drivers to support Steam Play
+- make configurable
+  - arch independent
+  - os independent
+- gnome extension documentation and/or automated install
+- ros setup?
+- install jupyter lab
+- install R
+- install/update firefox
+- add Thai and Burmese
+- automatically select proper theme and icons
+- increase file watcher ulimit
+- install vim syntax highlighting?
+- install other desktop applications
+  - Slack
+  - Discord
+  - Zoom
+  - Video4Linux control
+  - Pulse Audio volume control
+- organize dock favorites?
+- set background picture?
+- vscode settings
+  - tabs
+  - setting Hack to terminal and editor font family
+  - icons
+  - extensions
+- intel media sdk (gstreamer plugins)

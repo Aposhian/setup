@@ -1,6 +1,4 @@
-#!/bin/bash
-
-# This installs most packages I want to have on an Ubuntu system (x86)
+#!/usr/bin/env bash
 
 ################
 #### Checks ####
@@ -26,12 +24,18 @@ fi
 
 export USER=$(logname)
 export HOME=/home/$USER
-PROFILE=$HOME/.bashrc
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+
+#########################
+######## Dotfiles #######
+#########################
+
+ln -s $SCRIPT_DIR/dotfiles/* $HOME/
 
 #########################
 #### Common Packages ####
 #########################
-echo "Installing common Linux packages..."
+echo "Installing Linux packages..."
 
 apt-get update -qq
 
@@ -45,7 +49,18 @@ apt-get install -yqq \
 	gnome-tweaks \
 	net-tools \
 	dos2unix \
-	ubuntu-restricted-extras
+	ubuntu-restricted-extras \
+	chrome-gnome-shell \
+	fonts-hack \
+	python3-pip \
+	lsb-release \
+	gnupg2 \
+	libpython3-dev \
+	guake \
+	libinput-tools \
+	ruby
+
+sudo gem install fusuma
 
 ################
 #### Python ####
@@ -55,10 +70,8 @@ if ! [ -d $HOME/anaconda3 ]
 then
 echo "Installing Anaconda Python (2020.07)..."
 
-# For using GUI packages
-# https://docs.anaconda.com/anaconda/install/linux/
 apt-get install -yqq \
-	libgl1-mesa-glx \
+	libgl1-mesa-glx \ # https://docs.anaconda.com/anaconda/install/linux/
 	libegl1-mesa \
 	libxrandr2 \
 	libxrandr2 \
@@ -69,7 +82,7 @@ apt-get install -yqq \
 	libxi6 \
 	libxtst6
 
-wget https://repo.anaconda.com/archive/Anaconda3-2020.07-Linux-x86_64.sh -O $HOME/anaconda.sh
+wget https://repo.anaconda.com/archive/Anaconda3-2020.11-Linux-x86_64.sh -O $HOME/anaconda.sh
 
 # Haven't figured out a way to do this silently AND add entries to .bashrc
 sudo -Hiu $USER bash $HOME/anaconda.sh
@@ -80,24 +93,21 @@ fi
 #### Node.js ####
 #################
 
+NVM_VERSION='v0.38.0'
+
 if ! [ -d $HOME/.nvm ]
 then
-echo "Installing Node.js Version Manager (0.35.3)..."
+echo "Installing Node.js Version Manager ($NVM_VERSION)..."
 
-# nvm 0.35.3
+# nvm
 # https://github.com/nvm-sh/nvm#install--update-script
-wget https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh -O $HOME/nvm-install.sh
+wget https://raw.githubusercontent.com/nvm-sh/nvm/$NVM_VERSION/install.sh -O $HOME/nvm-install.sh
 
 sudo -Hiu $USER bash $HOME/nvm-install.sh
 
 sudo -Hiu $USER nvm install node
 
 sudo -Hiu $USER nvm use node
-
-if [ -z $(grep 'npm-completion' $PROFILE) ]
-then
-npm completion >> $PROFILE
-fi
 
 else
 echo "Node.js Version Manager already installed"
@@ -128,16 +138,14 @@ fi
 
 if ! [ -d /usr/local/go ]
 then
-GO_VERSION=1.15
+GO_VERSION=1.16.3
 
 echo "Installing the Go compiler ($GO_VERSION)..."
 
 # https://golang.org/doc/install
 wget https://golang.org/dl/go$GO_VERSION.linux-amd64.tar.gz -O $HOME/go$GO_VERSION.linux-amd64.tar.gz
 
-tar -C /usr/local -xzf $HOME/go1.15.linux-amd64.tar.gz
-
-echo "export PATH=\$PATH:/usr/local/go/bin" >> $PROFILE
+tar -C /usr/local -xzf $HOME/go$GO_VERSION.linux-amd64.tar.gz
 
 else
 echo "Go already installed"
@@ -158,7 +166,6 @@ echo "Installing Docker..."
 apt-get install -yqq \
 	apt-transport-https \
 	ca-certificates \
-	curl \
 	gnupg-agent \
 	software-properties-common
 
@@ -244,7 +251,9 @@ echo "Installing tools for C++ development..."
 apt-get install -yqq \
 	clang \
 	clang-format \
-	cmake
+	clang-tidy \
+	cmake \
+	valgrind
 
 else
 echo "C++ tools already installed"
@@ -272,3 +281,50 @@ echo "Visual Studio Code already installed"
 
 fi
 
+###########################
+######### Nvidia ##########
+###########################
+
+if [-z "$(apt-cache search cuda | grep cuda)"]
+then
+
+echo "Installing Nvidia tools..."
+
+# https://developer.nvidia.com/cuda-downloads?target_os=Linux&target_arch=x86_64&=Ubuntu&target_version=20.04&target_type=deb_local
+wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/cuda-ubuntu2004.pin
+sudo mv cuda-ubuntu2004.pin /etc/apt/preferences.d/cuda-repository-pin-600
+wget https://developer.download.nvidia.com/compute/cuda/11.3.0/local_installers/cuda-repo-ubuntu2004-11-3-local_11.3.0-465.19.01-1_amd64.deb
+sudo dpkg -i cuda-repo-ubuntu2004-11-3-local_11.3.0-465.19.01-1_amd64.deb
+sudo apt-key add /var/cuda-repo-ubuntu2004-11-3-local/7fa2af80.pub
+sudo apt-get update
+sudo apt-get -y install cuda
+
+else
+
+	echo "CUDA already installed"
+
+fi
+
+############################
+########## ROS1 ############
+############################
+sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
+sudo apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654
+sudo apt update
+sudo apt install -yqq ros-noetic-desktop-full
+
+############################
+########## ROS2 ############
+############################
+# https://docs.ros.org/en/foxy/Installation/Ubuntu-Install-Binary.html
+sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key  -o /usr/share/keyrings/ros-archive-keyring.gpg
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
+sudo apt-get update
+sudo apt-get install -yqq ros-foxy-desktop
+python3 -m pip install -U argcomplete
+
+############################
+###### Customization #######
+############################
+
+sudo apt-add-repository ppa:papirus/papirus && sudo apt install papirus-icon-theme
