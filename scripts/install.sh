@@ -325,7 +325,8 @@ sudo apt-get update
 sudo apt-get install -yqq \
 	ros-foxy-desktop \
 	python3-colcon-common-extensions \
-	python3-rosdep
+	python3-rosdep \
+	python3-vcstool
 python3 -m pip install -U argcomplete
 sudo rosdep init
 rosdep update

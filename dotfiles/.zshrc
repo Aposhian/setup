@@ -44,5 +44,6 @@ alias calc='noglob calc'
 
 source /opt/ros/foxy/setup.zsh
 source <(npm completion)
+source /usr/share/vcstool-completion/vcs.zsh
 
 alias ls='ls -a'
