@@ -1,11 +1,13 @@
-export ZSH="/home/adam/.oh-my-zsh"
+source ~/.setup
+
+export ZSH="$SETUP_HOME/zsh/ohmyzsh"
 ZSH_THEME="agnoster"
 DEFAULT_USER="adam"
 
 plugins=(git)
 
 source $ZSH/oh-my-zsh.sh
-source ../zsh-plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+source $SETUP_HOME/zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 # User configuration
 
