@@ -5,6 +5,7 @@ DEFAULT_USER="adam"
 plugins=(git)
 
 source $ZSH/oh-my-zsh.sh
+source ../zsh-plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 # User configuration
 
@@ -41,3 +42,5 @@ alias calc='noglob calc'
 
 source /opt/ros/foxy/setup.zsh
 source <(npm completion)
+
+alias ls='ls -a'
