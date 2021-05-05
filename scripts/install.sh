@@ -62,7 +62,8 @@ apt-get install -yqq \
 	libinput-tools \
 	ruby \
 	libnotify-bin \
-	notify-osd
+	notify-osd \
+	peek
 
 sudo gem install fusuma
 
