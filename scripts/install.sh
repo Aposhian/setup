@@ -60,7 +60,9 @@ apt-get install -yqq \
 	libpython3-dev \
 	guake \
 	libinput-tools \
-	ruby
+	ruby \
+	libnotify-bin \
+	notify-osd
 
 sudo gem install fusuma
 
@@ -73,7 +75,7 @@ then
 echo "Installing Anaconda Python (2020.07)..."
 
 apt-get install -yqq \
-	libgl1-mesa-glx \ # https://docs.anaconda.com/anaconda/install/linux/
+	libgl1-mesa-glx \
 	libegl1-mesa \
 	libxrandr2 \
 	libxrandr2 \
