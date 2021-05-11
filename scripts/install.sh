@@ -335,6 +335,14 @@ sudo rosdep init
 rosdep update
 
 ############################
+########### AWS ############
+############################
+cd $HOME && \
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "$HOME/awscliv2.zip" && \
+unzip $HOME/awscliv2.zip && \
+sudo $HOME/aws/install
+
+############################
 ###### Customization #######
 ############################
 
