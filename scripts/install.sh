@@ -68,6 +68,7 @@ apt-get install -yqq \
 	gnupg \
 	apt-transport-https \
 	software-properties-common \
+	libvirt-dev \
 	peek
 
 sudo gem install fusuma
@@ -243,6 +244,14 @@ else
 echo "kubectl already installed"
 
 fi
+
+####################
+##### Vagrant ######
+####################
+curl -fsSL https://apt.releases.hashicorp.com/gpg | apt-key add -
+apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+apt-get update && sudo apt-get install vagrant
+vagrant plugin install vagrant-libvirt
 
 ##############
 #### Java ####

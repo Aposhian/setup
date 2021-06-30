@@ -47,4 +47,6 @@ source /opt/ros/foxy/setup.zsh
 source <(npm completion)
 source /usr/share/vcstool-completion/vcs.zsh
 
+export VAGRANT_DEFAULT_PROVIDER=libvirt
+
 alias ls='ls -a'
