@@ -69,7 +69,10 @@ apt-get install -yqq \
 	apt-transport-https \
 	software-properties-common \
 	libvirt-dev \
-	peek
+	peek \
+    kazam \
+    iperf \
+    tcpdump
 
 sudo gem install fusuma
 
@@ -370,3 +373,13 @@ sudo $HOME/aws/install
 ############################
 
 sudo apt-add-repository ppa:papirus/papirus && sudo apt install papirus-icon-theme
+
+
+############################
+########## Vim #############
+############################
+
+# Vundle
+git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+
+vim +PluginInstall +qall

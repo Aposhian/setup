@@ -43,10 +43,15 @@ print($@)" | python3
 }
 alias calc='noglob calc'
 
-source /opt/ros/foxy/setup.zsh
 source <(npm completion)
 source /usr/share/vcstool-completion/vcs.zsh
 
-export VAGRANT_DEFAULT_PROVIDER=libvirt
 
-alias ls='ls -a'
+alias ls='ls -a --color=auto'
+alias xc='xclip -sel clip'
+alias v='vim'
+alias gis='git status'
+export GIT_PAGER=0
+
+export ROS_DOMAIN_ID=4
+export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
