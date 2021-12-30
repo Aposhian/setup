@@ -317,22 +317,17 @@ else
 fi
 
 ############################
-########## ROS1 ############
-############################
-sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
-sudo apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654
-sudo apt update
-sudo apt install -yqq ros-noetic-desktop-full
-
-############################
 ########## ROS2 ############
 ############################
 # https://docs.ros.org/en/foxy/Installation/Ubuntu-Install-Binary.html
 sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key  -o /usr/share/keyrings/ros-archive-keyring.gpg
 echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
 sudo apt-get update
+
+ROS_DISTRO=galactic
+
 sudo apt-get install -yqq \
-	ros-foxy-desktop \
+	ros-$ROS_DISTRO-desktop \
 	python3-colcon-common-extensions \
 	python3-rosdep \
 	python3-vcstool
