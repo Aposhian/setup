@@ -72,7 +72,8 @@ apt-get install -yqq \
 	peek \
     kazam \
     iperf \
-    tcpdump
+    tcpdump \
+    pavucontrol
 
 sudo gem install fusuma
 
@@ -80,29 +81,8 @@ sudo gem install fusuma
 #### Python ####
 ################
 
-if ! [ -d $HOME/anaconda3 ]
-then
-echo "Installing Anaconda Python (2020.07)..."
-
-apt-get install -yqq \
-	libgl1-mesa-glx \
-	libegl1-mesa \
-	libxrandr2 \
-	libxrandr2 \
-	libxss1 \
-	libxcursor1 \
-	libxcomposite1 \
-	libasound2 \
-	libxi6 \
-	libxtst6
-
-wget https://repo.anaconda.com/archive/Anaconda3-2020.11-Linux-x86_64.sh -O $HOME/anaconda.sh
-
-# Haven't figured out a way to do this silently AND add entries to .bashrc
-sudo -Hiu $USER bash $HOME/anaconda.sh
-
-fi
-
+apt-get install -y python3-pip &&
+    python3 -m pip install --upgrade pip
 
 #################
 ####### R #######

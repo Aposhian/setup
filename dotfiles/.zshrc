@@ -51,7 +51,17 @@ alias ls='ls -a --color=auto'
 alias xc='xclip -sel clip'
 alias v='vim'
 alias gis='git status'
-export GIT_PAGER=0
+export GIT_PAGER=cat
 
 export ROS_DOMAIN_ID=4
 export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+
+for ros_distro_dir in /opt/ros/*
+do
+        ros_distro=$(basename $ros_distro_dir)
+        alias $ros_distro="source /opt/ros/$ros_distro/setup.zsh"
+done
+
+# Install Ruby Gems to ~/gems
+export GEM_HOME="$HOME/gems"
+export PATH="$HOME/gems/bin:$PATH"

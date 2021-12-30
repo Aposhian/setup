@@ -12,6 +12,7 @@ Plugin 'ntpeters/vim-better-whitespace'
 Plugin 'jvirtanen/vim-hcl'
 Plugin 'ekalinin/Dockerfile.vim'
 Plugin 'ycm-core/YouCompleteMe'
+Plugin 'rdnetto/YCM-Generator'
 call vundle#end()
 
 filetype plugin indent on
@@ -25,3 +26,4 @@ set tabstop=4
 set mouse=a
 set hlsearch
 autocmd BufNewFile,BufRead Jenkinsfile set syntax=groovy
+let g:ycm_python_binary_path = 'python3'
