@@ -8,4 +8,5 @@
 - name: Install AWS CLI v2
   command:
     cmd: /tmp/aws/install
-    become: yes
+    creates: /usr/local/bin/aws
+  become: yes
