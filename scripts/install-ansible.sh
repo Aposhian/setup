@@ -32,8 +32,7 @@ fi
 if [ -e /usr/bin/apt-get ]
 then
     info "apt-get detected"
-    apt-get update && apt-get install -yq lsb-release
-    if lsb_release -a | grep -i ubuntu
+    if grep -i ubuntu /etc/os-release
     then
         info "Ubuntu detected"
         apt-get install -y software-properties-common ||
@@ -66,7 +65,7 @@ then
         info "CentOS detected"
         yum install -y epel-release
     fi
-    yum -y install ansible
+    yum install -y ansible
 fi
 
 if ansible-playbook --version &> /dev/null

@@ -8,7 +8,7 @@ source $SCRIPT_DIR/bash-logging.sh
 INSTALL_SCRIPT=install-ansible.sh
 
 test_os() {
-    if docker run -v $SCRIPT_DIR/$INSTALL_SCRIPT:/$INSTALL_SCRIPT --entrypoint /$INSTALL_SCRIPT $1 &> /dev/null
+    if docker run -v $SCRIPT_DIR/$INSTALL_SCRIPT:/$INSTALL_SCRIPT --entrypoint /$INSTALL_SCRIPT $1
     then
         success "Successfully installed ansible on $1"
     else
