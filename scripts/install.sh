@@ -45,6 +45,8 @@ apt-get install -yqq \
 	git \
 	vim \
 	build-essential \
+    linux-tools-generic \
+    nethogs \
 	xclip \
 	zsh \
 	curl \
