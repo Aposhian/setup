@@ -15,8 +15,14 @@
     repo: deb [arch={{ ansible_architecture }} signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu {{ ansible_distribution_release }} main
     filename: ros2
     state: present
-- name: Install ROS 2 desktop
-  apt:
-    name: ros-{{ ros_distro }}-desktop
+- apt:
+    name: ros-{{ ros_distro }}-ros-base
     state: present
     update_cache: yes
+- apt:
+    name: python3-colcon-common-extensions
+    state: present
+- apt:
+    name: python3-rosdep
+- apt:
+    name: python3-vcstool
