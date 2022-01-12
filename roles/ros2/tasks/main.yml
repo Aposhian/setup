@@ -10,3 +10,12 @@
   pip:
     name: argcomplete
     state: present
+- name: rosdep initialized
+  become: yes
+  command:
+    cmd: rosdep init
+    creates: /etc/ros/rosdep/sources.list.d/20-default.list
+- name: rosdep updated
+  become: no
+  command:
+    cmd: rosdep update
