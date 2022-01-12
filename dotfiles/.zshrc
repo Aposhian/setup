@@ -33,6 +33,7 @@ source /usr/share/vcstool-completion/vcs.zsh
 
 
 alias ls='ls -a --color=auto'
+alias less='less -R'
 alias xc='xclip -sel clip'
 alias v='vim'
 alias gis='git status'
