@@ -1,28 +1,46 @@
 ---
 # https://docs.ros.org/en/galactic/Installation/Ubuntu-Install-Debians.html
-- name: Enable universe repository
+- name: Universe respository enabled
   apt_repository:
     repo: deb http://archive.ubuntu.com/ubuntu {{ ansible_distribution_release }} universe
     state: present
-- name: Authorize ROS 2 GPG Key
+  become: yes
+- name: ROS 2 GPG Key authorized
   apt_key:
     url: https://raw.githubusercontent.com/ros/rosdistro/master/ros.key
     id: C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654
     keyring: /usr/share/keyrings/ros-archive-keyring.gpg
     state: present
-- name: Add ROS 2 apt repository
+  become: yes
+- name: ROS 2 apt repository added
   apt_repository:
-    repo: deb [arch={{ ansible_architecture }} signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu {{ ansible_distribution_release }} main
+    repo: deb [arch={{ 'amd64' if ansible_architecture == 'x86_64' else ansible_architecture }} signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu {{ ansible_distribution_release }} main
     filename: ros2
     state: present
-- apt:
+  become: yes
+- name: ros-base installed
+  apt:
     name: ros-{{ ros_distro }}-ros-base
     state: present
     update_cache: yes
-- apt:
+  become: yes
+- name: colcon extensions installed
+  apt:
     name: python3-colcon-common-extensions
     state: present
-- apt:
+  become: yes
+- name: rosdep installed
+  apt:
     name: python3-rosdep
-- apt:
+    state: present
+  become: yes
+- name: vcstool installed
+  apt:
     name: python3-vcstool
+    state: present
+  become: yes
+- name: pip installed
+  apt:
+    name: python3-pip
+    state: present
+  become: yes

@@ -1,3 +1,4 @@
 - hosts: ubuntu20
   roles:
+    - ros2
     - aws
