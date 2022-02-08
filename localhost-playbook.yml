@@ -2,3 +2,6 @@
   connection: local
   roles:
     - ros2
+    - aws
+    - vscode
+    - firefox

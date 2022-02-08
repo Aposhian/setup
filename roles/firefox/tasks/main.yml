@@ -1,0 +1,11 @@
+---
+# https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
+- name: Firefox PPA added
+  apt_repository:
+    repo: ppa:ubuntu-mozilla-security/ppa
+    state: present
+    update_cache: True
+- name: Firefox installed
+  apt:
+    name: firefox
+    state: present
