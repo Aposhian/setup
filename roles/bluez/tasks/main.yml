@@ -1,0 +1,39 @@
+---
+- name: Get installed bluez version
+  command: /usr/local/libexec/bluetooth/bluetoothd --version
+  ignore_errors: true
+  changed_when: false
+  failed_when: false
+  register: installed_bluez_version
+- name: Force install if version numbers don't match
+  set_fact:
+    bluez_reinstall_from_source: true
+  when: '(installed_bluez_version|success and (installed_bluez_version.stdout | regex_replace("^.*?([0-9\.]+).*$", "\\1") | version_compare(bluez_version, operator="<")))'
+- name: Bluez source downloaded
+  when: bluez_reinstall_from_source
+  unarchive:
+    src: http://www.kernel.org/pub/linux/bluetooth/bluez-{{ bluez_version }}.tar.xz
+    dest: ~/bluez
+    remote_src: yes
+    creates: ~/bluez/bluez-{{ bluez_version }}
+- name: Configure bluez
+  when: bluez_reinstall_from_source
+  command:
+    chdir: ~/bluez/bluez-{{ bluez_version }}
+    cmd: ./configure
+    creates: ./Makefile
+- name: Build bluez
+  when: bluez_reinstall_from_source
+  command:
+    chdir: ~/bluez/bluez-{{ bluez_version }}
+    cmd: make
+    creates: ./src/bluetoothd
+- name: Install bluez
+  when: bluez_reinstall_from_source
+  become: yes
+  command:
+    chdir: ~/bluez/bluez-{{ bluez_version }}
+    cmd: make install
+- name: Reload systemd
+  systemd:
+    daemon_reload: yes

@@ -305,57 +305,6 @@ echo "Visual Studio Code already installed"
 
 fi
 
-###########################
-######### Nvidia ##########
-###########################
-
-if [-z "$(apt-cache search cuda | grep cuda)"]
-then
-
-echo "Installing Nvidia tools..."
-
-# https://developer.nvidia.com/cuda-downloads?target_os=Linux&target_arch=x86_64&=Ubuntu&target_version=20.04&target_type=deb_local
-wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/cuda-ubuntu2004.pin
-sudo mv cuda-ubuntu2004.pin /etc/apt/preferences.d/cuda-repository-pin-600
-wget https://developer.download.nvidia.com/compute/cuda/11.3.0/local_installers/cuda-repo-ubuntu2004-11-3-local_11.3.0-465.19.01-1_amd64.deb
-sudo dpkg -i cuda-repo-ubuntu2004-11-3-local_11.3.0-465.19.01-1_amd64.deb
-sudo apt-key add /var/cuda-repo-ubuntu2004-11-3-local/7fa2af80.pub
-sudo apt-get update
-sudo apt-get -y install cuda
-
-else
-
-	echo "CUDA already installed"
-
-fi
-
-############################
-########## ROS2 ############
-############################
-# https://docs.ros.org/en/foxy/Installation/Ubuntu-Install-Binary.html
-sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key  -o /usr/share/keyrings/ros-archive-keyring.gpg
-echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
-sudo apt-get update
-
-ROS_DISTRO=galactic
-
-sudo apt-get install -yqq \
-	ros-$ROS_DISTRO-desktop \
-	python3-colcon-common-extensions \
-	python3-rosdep \
-	python3-vcstool
-python3 -m pip install -U argcomplete
-sudo rosdep init
-rosdep update
-
-############################
-########### AWS ############
-############################
-cd $HOME && \
-curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "$HOME/awscliv2.zip" && \
-unzip $HOME/awscliv2.zip && \
-sudo $HOME/aws/install
-
 ############################
 ###### Customization #######
 ############################
