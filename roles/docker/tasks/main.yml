@@ -1,0 +1,33 @@
+---
+# https://docs.ros.org/en/galactic/Installation/Ubuntu-Install-Debians.html
+- name: Remove old docker packages
+  apt:
+    name:
+      - docker
+      - docker-engine
+      - docker.io
+      - containerd
+      - runc
+    state: absent
+- name: Docker Key authorized
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    id: 9DC858229FC7DD38854AE2D88D81803C0EBFCD88
+    keyring: /usr/share/keyrings/docker-archive-keyring.gpg
+    state: present
+  become: yes
+- name: Docker apt repository added
+  apt_repository:
+    repo: deb [arch={{ 'amd64' if ansible_architecture == 'x86_64' else ansible_architecture }} signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable
+    filename: docker
+    state: present
+  become: yes
+- name: Docker Engine Installed
+  apt:
+    name:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+    state: present
+    update_cache: yes
+  become: yes
