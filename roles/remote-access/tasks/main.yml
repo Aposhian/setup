@@ -1,5 +1,6 @@
 ---
 - name: Common remote access apps
+  become: yes
   package:
     name:
       - htop
