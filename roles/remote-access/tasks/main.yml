@@ -1,0 +1,11 @@
+---
+- name: Common remote access apps
+  package:
+    name:
+      - htop
+      - nethogs
+      - nmap
+      - traceroute
+      - mosh
+      - net-tools
+    state: present
