@@ -5,10 +5,16 @@
     url: https://www.virtualbox.org/download/oracle_vbox_2016.asc
     id: B9F8D658297AF3EFC18D5CDFA2F683C52980AECF
     state: present
+- name: Get DEB architecture
+  shell: dpkg --print-architecture
+  register: deb_architecture_cmd
+- name: Store DEB architecture
+  set_fact:
+    deb_architecture: "{{ deb_architecture_cmd.stdout }}"
 - name: Virtualbox Repository added
   become: yes
   apt_repository:
-    repo: deb [arch={{ 'amd64' if ansible_architecture == 'x86_64' else ansible_architecture }}] https://download.virtualbox.org/virtualbox/debian {{ ansible_distribution_release }} contrib
+    repo: deb [arch={{ deb_architecture }}] https://download.virtualbox.org/virtualbox/debian {{ ansible_distribution_release }} contrib
     state: present
     update_cache: True
 - name: Virtualbox installed

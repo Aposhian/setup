@@ -5,10 +5,16 @@
     url: https://packages.microsoft.com/keys/microsoft.asc
     id: BC528686B50D79E339D3721CEB3E94ADBE1229CF
     state: present
+- name: Get DEB architecture
+  shell: dpkg --print-architecture
+  register: deb_architecture_cmd
+- name: Store DEB architecture
+  set_fact:
+    deb_architecture: "{{ deb_architecture_cmd.stdout }}"
 - name: vscode repository added
   become: yes
   apt_repository:
-    repo: deb [arch={{ 'amd64' if ansible_architecture == 'x86_64'}}] https://packages.microsoft.com/repos/vscode stable main
+    repo: deb [arch={{ deb_architecture }}] https://packages.microsoft.com/repos/vscode stable main
     filename: ros2
     state: present
 - name: vscode installed
