@@ -1,0 +1,14 @@
+---
+# https://go.dev/doc/install
+- name: Get installed go version
+  command: /usr/local/go version 
+  ignore_errors: true
+  changed_when: false
+  failed_when: false
+  register: go_version_result
+- name: Compare go version to desired go version
+  set_fact:
+    install_go: true
+  when: '(go_version_result|success and (go_version_result.stdout | regex_replace("^.*?([0-9\.]+).*$", "\\1") | version(go_version, "<")))'
+- import_tasks: install-go.yml
+  when: install_go

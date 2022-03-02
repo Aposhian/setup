@@ -1,0 +1,4 @@
+---
+- name: Store DEB architecture
+  set_fact:
+    deb_architecture: "{{ arch_dict[ansible_architecture] }}"

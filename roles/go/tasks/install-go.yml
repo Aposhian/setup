@@ -1,0 +1,20 @@
+---
+- name: Uninstall current go
+  become: yes
+  file:
+    path: /usr/local/go
+    state: absent
+- name: Set deb_architecture
+  import_role: deb-architecture
+- name: Download go
+  get_url:
+    checksum: sha256:{{ go_checksum }}
+    dest: /tmp/go.tar.gz
+    url: https://go.dev/dl/go{{ go_version }}.linux-{{ deb_architecture }}.tar.gz
+- name: Extract go
+  become: yes
+  unarchive:
+    creates: /usr/local/go
+    remote_src: yes
+    src: /tmp/go.tar.gz
+    dest: /usr/local/
