@@ -148,26 +148,6 @@ echo "Rust already installed"
 
 fi
 
-############
-#### Go ####
-############
-
-if ! [ -d /usr/local/go ]
-then
-GO_VERSION=1.16.3
-
-echo "Installing the Go compiler ($GO_VERSION)..."
-
-# https://golang.org/doc/install
-wget https://golang.org/dl/go$GO_VERSION.linux-amd64.tar.gz -O $HOME/go$GO_VERSION.linux-amd64.tar.gz
-
-tar -C /usr/local -xzf $HOME/go$GO_VERSION.linux-amd64.tar.gz
-
-else
-echo "Go already installed"
-
-fi
-
 ################
 #### Docker ####
 ################
