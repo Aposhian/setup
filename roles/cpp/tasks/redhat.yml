@@ -1,0 +1,6 @@
+---
+- name: Install @development-tools
+  become: yes
+  dnf:
+    name: '@development-tools'
+    state: present

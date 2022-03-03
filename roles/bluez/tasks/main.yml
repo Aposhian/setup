@@ -1,39 +1,49 @@
 ---
-- name: Get installed bluez version
-  command: /usr/local/libexec/bluetooth/bluetoothd --version
-  ignore_errors: true
-  changed_when: false
-  failed_when: false
-  register: installed_bluez_version
-- name: Force install if version numbers don't match
-  set_fact:
-    bluez_reinstall_from_source: true
-  when: '(installed_bluez_version|success and (installed_bluez_version.stdout | regex_replace("^.*?([0-9\.]+).*$", "\\1") | version_compare(bluez_version, operator="<")))'
-- name: Bluez source downloaded
-  when: bluez_reinstall_from_source
+- name: Download bluez source
+  get_url:
+    url: http://www.kernel.org/pub/linux/bluetooth/bluez-{{ bluez_version }}.tar.xz
+    checksum: sha256:{{ bluez_checksum }}
+    dest: /tmp/bluez.tar.gz
+- name: Extract bluez source
+  become: yes
   unarchive:
-    src: http://www.kernel.org/pub/linux/bluetooth/bluez-{{ bluez_version }}.tar.xz
-    dest: ~/bluez
+    src: /tmp/bluez.tar.gz
+    dest: "{{ bluez_source_dir | dirname }}"
     remote_src: yes
-    creates: ~/bluez/bluez-{{ bluez_version }}
+    creates: "{{ bluez_source_dir }}"
+- name: Install necessary headers and libraries
+  become: yes
+  package:
+    name:
+      - libglib2.0-dev
+      - libusb-dev
+      - libdbus-1-dev
+      - libudev-dev
+      - libical-dev
+      - libreadline-dev
+      - python3-docutils
+    state: present
 - name: Configure bluez
-  when: bluez_reinstall_from_source
+  become: yes # maybe get rid of this with chown
   command:
-    chdir: ~/bluez/bluez-{{ bluez_version }}
+    chdir: "{{ bluez_source_dir }}"
     cmd: ./configure
     creates: ./Makefile
 - name: Build bluez
-  when: bluez_reinstall_from_source
+  become: yes # maybe get rid of this with chown
   command:
-    chdir: ~/bluez/bluez-{{ bluez_version }}
+    chdir: "{{ bluez_source_dir }}"
     cmd: make
     creates: ./src/bluetoothd
 - name: Install bluez
-  when: bluez_reinstall_from_source
   become: yes
   command:
-    chdir: ~/bluez/bluez-{{ bluez_version }}
+    chdir: "{{ bluez_source_dir }}"
     cmd: make install
+    creates: /usr/local/libexec/bluetooth/bluetoothd
+  register: bluez_installed
 - name: Reload systemd
+  become: yes
   systemd:
     daemon_reload: yes
+  when: bluez_installed.changed

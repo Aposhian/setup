@@ -1,0 +1,12 @@
+---
+- name: Debian build-essential
+  import_tasks: debian.yml
+  when: ansible_facts['os_family'] == 'Debian'
+- name: Fedora build-essential
+  import_tasks: redhat.yml
+  when: ansible_facts['os_family'] == 'RedHat'
+- name: Install cmake
+  become: yes
+  package:
+    name: cmake
+    state: present

@@ -1,0 +1,6 @@
+---
+- name: Install build-essential
+  become: yes
+  apt:
+    name: build-essential
+    state: present

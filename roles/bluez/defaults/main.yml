@@ -1,1 +1,3 @@
 bluez_version: 5.63
+bluez_checksum: 9349e11e8160bb3d720835d271250d8a7424d3690f5289e6db6fe07cc66c6d76
+bluez_source_dir: /usr/local/src/bluez-{{ bluez_version }}
