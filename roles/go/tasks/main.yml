@@ -1,14 +1,25 @@
 ---
-# https://go.dev/doc/install
-- name: Get installed go version
-  command: /usr/local/go version 
-  ignore_errors: true
-  changed_when: false
-  failed_when: false
-  register: go_version_result
-- name: Compare go version to desired go version
-  set_fact:
-    install_go: true
-  when: '(go_version_result|success and (go_version_result.stdout | regex_replace("^.*?([0-9\.]+).*$", "\\1") | version(go_version, "<")))'
-- import_tasks: install-go.yml
-  when: install_go
+- name: Set deb_architecture
+  import_role:
+    name: deb-architecture
+- name: Download go
+  get_url:
+    checksum: sha256:{{ go_checksum }}
+    dest: /tmp/go.tar.gz
+    url: https://go.dev/dl/go{{ go_version }}.linux-{{ deb_architecture }}.tar.gz
+- name: Extract go
+  become: yes
+  unarchive:
+    creates: "{{ go_dir }}"
+    remote_src: yes
+    src: /tmp/go.tar.gz
+    dest: "{{ go_dir | dirname }}"
+- name: Add go to PATH
+  become: yes
+  vars:
+    go_bin_dir: "{{ (go_dir, 'bin') | path_join }}"
+  lineinfile:
+    path: /etc/environment
+    regexp: 'PATH=(["])((?!.*?{{ go_bin_dir }}).*?)(["])$'
+    line: 'PATH=\1\2:{{ go_bin_dir }}\3'
+    backrefs: yes
