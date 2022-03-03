@@ -1,7 +1,4 @@
 ---
-- name: Set deb_architecture
-  import_role:
-    name: deb-architecture
 - name: Download go
   get_url:
     checksum: sha256:{{ go_checksum }}

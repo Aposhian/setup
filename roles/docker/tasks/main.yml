@@ -17,12 +17,6 @@
     keyring: /usr/share/keyrings/docker-archive-keyring.gpg
     state: present
   become: yes
-- name: Get DEB architecture
-  shell: dpkg --print-architecture
-  register: deb_architecture_cmd
-- name: Store DEB architecture
-  set_fact:
-    deb_architecture: "{{ deb_architecture_cmd.stdout }}"
 - name: Docker apt repository added
   apt_repository:
     # TODO: handle aarch64 to arm64

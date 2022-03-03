@@ -1,0 +1,7 @@
+---
+- name: Get deb-style architecture from dpkg
+  shell: dpkg --print-architecture
+  register: deb_architecture_cmd
+- name: Set deb_architecture fact
+  set_fact:
+    deb_architecture: "{{ deb_architecture_cmd.stdout }}"

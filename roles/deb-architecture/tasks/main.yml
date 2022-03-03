@@ -1,4 +1,8 @@
 ---
-- name: Store DEB architecture
+- name: Get deb-style architecture from dpkg
+  import_tasks: debian.yml
+  when: deb_architecture is not defined and ansible_facts['os_family'] == 'Debian'
+- name: Get deb-style architecture from internal map
   set_fact:
     deb_architecture: "{{ arch_dict[ansible_architecture] }}"
+  when: deb_architecture is not defined and ansible_facts['os_family'] != 'Debian'
