@@ -1,0 +1,9 @@
+---
+- name: Install C++ development packages
+  package:
+    name:
+      - cmake
+      - valgrind
+      - clang-tidy
+      - clang-format
+    state: present
