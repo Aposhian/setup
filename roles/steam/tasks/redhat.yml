@@ -1,0 +1,11 @@
+---
+# https://docs.ros.org/en/galactic/Installation/Ubuntu-Install-Debians.html
+- name: Download steam.rpm
+  get_url:
+    url: https://media.steampowered.com/client/installer/steam.rpm
+    dest: /tmp/steam.rpm
+- name: Install steam
+  become: yes
+  yum:
+    name: /tmp/steam.rpm
+    state: present
