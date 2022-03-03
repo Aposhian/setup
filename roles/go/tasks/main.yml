@@ -18,6 +18,7 @@
   become: yes
   vars:
     go_bin_dir: "{{ (go_dir, 'bin') | path_join }}"
+  # https://stackoverflow.com/a/56561538/5850658
   lineinfile:
     path: /etc/environment
     regexp: 'PATH=(["])((?!.*?{{ go_bin_dir }}).*?)(["])$'
