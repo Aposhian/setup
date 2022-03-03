@@ -1,0 +1,17 @@
+---
+- name: Ensure ~/.local/bin exists
+  become: no
+  file:
+    path: ~/.local/bin
+    state: directory
+- name: Download nvm installer
+  become: no
+  get_url:
+    url: https://raw.githubusercontent.com/nvm-sh/nvm/v{{ nvm_version }}/install.sh
+    dest: ~/.local/bin/nvm-install.sh
+    checksum: sha256:{{ nvm_installer_checksum }}
+- name: Install nvm
+  become: no
+  command:
+    cmd: bash ~/.local/bin/nvm-install.sh
+    creates: ~/.nvm/nvm.sh
