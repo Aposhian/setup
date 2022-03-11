@@ -16,9 +16,13 @@
   git:
     repo: https://github.com/zsh-users/zsh-autosuggestions.git
     dest: ~/src/zsh-autosuggestions
+- name: Set shell_* startup file facts
+  set_fact:
+    shell_rc: ~/.zshrc
+    shell_env: ~/.zshenv
 - name: Oh My Zsh setup
   blockinfile:
-    path: ~/.zshrc
+    path: "{{ shell_rc }}"
     create: yes
     insertbefore: BOF
     marker_begin: ohmyzsh-setup-begin
@@ -30,7 +34,3 @@
       plugins=(git)
       source $ZSH/oh-my-zsh.sh
       source ~/src/zsh-autosuggestions/zsh-autosuggestions.zsh
-- name: Set shell_* startup file facts
-  set_fact:
-    shell_rc: ~/.zshrc
-    shell_env: ~/.zshenv
