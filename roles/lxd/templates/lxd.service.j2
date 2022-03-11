@@ -1,0 +1,12 @@
+[Unit]
+Description="LXD"
+Documentation="https://linuxcontainers.org/lxd/docs/master/"
+
+[Service]
+User=root
+Environment=LD_LIBRARY_PATH={{ ansible_env.HOME }}/src/lxd-4.23/vendor/raft/.libs/:{{ ansible_env.HOME }}/src/lxd-4.23/vendor/dqlite/.libs/
+ExecStart=bash -c "PATH=$PATH:{{ go_path }}/bin lxd --group sudo"
+ExecStartPost=bash -c "PATH=$PATH:{{ go_path }}/bin lxd init --auto"
+
+[Install]
+WantedBy=multi-user.target

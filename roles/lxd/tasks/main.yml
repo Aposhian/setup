@@ -44,3 +44,16 @@
   loop:
     - /etc/subuid
     - /etc/subgid
+- name: Add systemd service for LXD
+  become: yes
+  template:
+    src: lxd.service.j2
+    dest: /etc/systemd/system/lxd.service
+  register: systemd_template_result
+- name: LXD service started
+  become: yes
+  systemd:
+    name: lxd.service
+    daemon_reload: yes
+    enabled: yes
+    state: started
