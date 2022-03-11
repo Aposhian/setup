@@ -57,3 +57,9 @@
     daemon_reload: yes
     enabled: yes
     state: started
+- name: Initialize lxd
+  shell:
+    cmd: |
+      export LD_LIBRARY_PATH="$HOME/src/lxd-4.23/vendor/raft/.libs/:$HOME/src/lxd-4.23/vendor/dqlite/.libs/:$LD_LIBRARY_PATH"
+      export PATH="$PATH:{{ go_path}}/bin"
+      lxd init --auto
