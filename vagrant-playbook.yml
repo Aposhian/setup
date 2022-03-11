@@ -1,4 +1,4 @@
 - hosts: ubuntu20
   roles:
     - zsh
-    - go
+    - lxd

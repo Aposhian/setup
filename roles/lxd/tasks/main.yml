@@ -22,15 +22,17 @@
     chdir: ~/src/lxd-{{ lxd_version }}
     cmd: make deps
     creates: ./vendor/raft/libtool # TODO: use something more robust than this
+  register: make_deps
 - name: Build LXD
-  # TODO: this should actually come from the output of the previous command
-  environment:
-    CGO_CFLAGS: "-I{{ ansible_env.HOME }}/src/lxd-4.23/vendor/raft/include/ -I{{ ansible_env.HOME }}/src/lxd-4.23/vendor/dqlite/include/"
-    CGO_LDFLAGS: "-L{{ ansible_env.HOME }}/src/lxd-4.23/vendor/raft/.libs -L{{ ansible_env.HOME }}/src/lxd-4.23/vendor/dqlite/.libs/"
-    LD_LIBRARY_PATH: "{{ ansible_env.HOME }}/src/lxd-4.23/vendor/raft/.libs/:{{ ansible_env.HOME }}/src/lxd-4.23/vendor/dqlite/.libs/"
-    CGO_LDFLAGS_ALLOW: "(-Wl,-wrap,pthread_create)|(-Wl,-z,now)"
-  command:
+  shell:
     chdir: ~/src/lxd-{{ lxd_version }}
-    cmd: make
+    cmd: |
+      {{ make_deps.stdout | regex_search('^export.*', multiline=True) }}
+      make
     creates: ~/go/bin/lxd
-# - name: Add dependencies to path
+- name: Add dependencies to LD_LIBRARY_PATH
+  lineinfile:
+    path: "{{ shell_env }}"
+    create: yes
+    line: export LD_LIBRARY_PATH="$HOME/src/lxd-4.23/vendor/raft/.libs/:$HOME/src/lxd-4.23/vendor/dqlite/.libs/:$LD_LIBRARY_PATH"
+  when: shell_env is defined
