@@ -1,0 +1,21 @@
+---
+- name: Install Vim binary
+  package:
+    name: vim
+    state: present
+- name: Add .vimrc
+  copy:
+    src: .vimrc
+    dest: ~/.vimrc
+- name: Install Vundle
+  git:
+    repo: https://github.com/VundleVim/Vundle.vim.git
+    dest: ~/.vim/bundle/Vundle.vim
+- name: Install vim plugins
+  # https://github.com/VundleVim/Vundle.vim/issues/511#issuecomment-134251209
+  shell: echo | echo | vim +PluginInstall +qall &> /dev/null
+- name: Set vim as default editor
+  lineinfile:
+    path: "{{ shell_env }}"
+    line: export EDITOR=vim
+  when: shell_env is defined
