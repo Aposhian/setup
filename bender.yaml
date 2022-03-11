@@ -1,0 +1,8 @@
+- hosts: all
+  vars:
+    ansible_bender:
+      base_image: "docker.io/library/ros:galactic"
+      target_image:
+        name: bender-test
+  roles:
+    - go
