@@ -1,0 +1,9 @@
+---
+- name: Ensure git is installed
+  package:
+    name: git
+    state: present
+- name: Add .gitconfig
+  copy:
+    src: .gitconfig
+    dest: ~/.gitconfig
