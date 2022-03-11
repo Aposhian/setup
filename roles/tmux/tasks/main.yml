@@ -1,0 +1,9 @@
+---
+- name: Install tmux binary
+  package:
+    name: tmux
+    state: present
+- name: Add .tmux.conf
+  copy:
+    src: .tmux.conf
+    dest: ~/.tmux.conf
