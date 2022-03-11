@@ -1,0 +1,36 @@
+---
+- name: Install dependencies for LXD on Debian-based OS
+  import_tasks: debian.yml
+  when: ansible_facts['os_family'] == 'Debian'
+- name: Home src directory is present
+  file:
+    path: ~/src
+    state: directory
+- name: Download LXD Release
+  get_url:
+    url: https://github.com/lxc/lxd/releases/download/lxd-{{ lxd_version }}/lxd-{{ lxd_version }}.tar.gz
+    checksum: "{{ lxd_checksum }}"
+    dest: /tmp/lxd-{{ lxd_version }}.tar.gz
+- name: Extract LXD source
+  unarchive:
+    src: /tmp/lxd-{{ lxd_version }}.tar.gz
+    remote_src: yes
+    dest: ~/src/
+    creates: ~/src/lxd-{{ lxd_version }}
+- name: Make LXD dependencies and get environment
+  command:
+    chdir: ~/src/lxd-{{ lxd_version }}
+    cmd: make deps
+    creates: ./vendor/raft/libtool # TODO: use something more robust than this
+- name: Build LXD
+  # TODO: this should actually come from the output of the previous command
+  environment:
+    CGO_CFLAGS: "-I{{ ansible_env.HOME }}/src/lxd-4.23/vendor/raft/include/ -I{{ ansible_env.HOME }}/src/lxd-4.23/vendor/dqlite/include/"
+    CGO_LDFLAGS: "-L{{ ansible_env.HOME }}/src/lxd-4.23/vendor/raft/.libs -L{{ ansible_env.HOME }}/src/lxd-4.23/vendor/dqlite/.libs/"
+    LD_LIBRARY_PATH: "{{ ansible_env.HOME }}/src/lxd-4.23/vendor/raft/.libs/:{{ ansible_env.HOME }}/src/lxd-4.23/vendor/dqlite/.libs/"
+    CGO_LDFLAGS_ALLOW: "(-Wl,-wrap,pthread_create)|(-Wl,-z,now)"
+  command:
+    chdir: ~/src/lxd-{{ lxd_version }}
+    cmd: make
+    creates: ~/go/bin/lxd
+# - name: Add dependencies to path

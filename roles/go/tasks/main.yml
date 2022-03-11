@@ -11,7 +11,7 @@
     remote_src: yes
     src: /tmp/go.tar.gz
     dest: "{{ go_dir | dirname }}"
-- name: Add go to PATH
+- name: Add go to system PATH
   become: yes
   vars:
     go_bin_dir: "{{ (go_dir, 'bin') | path_join }}"
@@ -21,3 +21,17 @@
     regexp: 'PATH=(["])((?!.*?{{ go_bin_dir }}).*?)(["])$'
     line: 'PATH=\1\2:{{ go_bin_dir }}\3'
     backrefs: yes
+- name: Get GOPATH
+  command:
+    cmd: "{{ (go_dir, 'bin', 'go') | path_join }} env GOPATH"
+  register: gopath_result
+- name: Set go_path fact
+  set_fact:
+    go_path: gopath_result.stdout
+# - name: Add GOPATH bin to user path
+#   # https://stackoverflow.com/a/56561538/5850658
+#   lineinfile:
+#     path: ~/.profile
+#     regexp: 'PATH=(["])((?!.*?{{ go_bin_dir }}).*?)(["])$'
+#     line: 'PATH=\1\2:{{ go_bin_dir }}\3'
+#     backrefs: yes

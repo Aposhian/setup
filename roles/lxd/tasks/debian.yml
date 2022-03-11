@@ -1,0 +1,30 @@
+---
+# https://linuxcontainers.org/lxd/docs/master/installing/#installing-lxd-from-source
+- name: Install dependencies
+  become: yes
+  apt:
+    name:
+      - acl
+      - attr
+      - autoconf
+      - dnsmasq-base
+      - git
+      - libacl1-dev
+      - libpcap-dev
+      - libcap-dev
+      - liblxc1
+      - liblxc-dev
+      - libsqlite3-dev
+      - libtool
+      - libudev-dev
+      - liblz4-dev
+      - libuv1-dev
+      - make
+      - pkg-config
+      - rsync
+      - squashfs-tools
+      - tar
+      - tcl
+      - xz-utils
+      - ebtables
+    state: present
