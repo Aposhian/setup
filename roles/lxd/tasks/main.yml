@@ -36,3 +36,11 @@
     create: yes
     line: export LD_LIBRARY_PATH="$HOME/src/lxd-4.23/vendor/raft/.libs/:$HOME/src/lxd-4.23/vendor/dqlite/.libs/:$LD_LIBRARY_PATH"
   when: shell_env is defined
+- name: Add subuid and subgid for root
+  become: yes
+  lineinfile:
+    path: "{{ item }}"
+    line: root:1000000:1000000000
+  loop:
+    - /etc/subuid
+    - /etc/subgid

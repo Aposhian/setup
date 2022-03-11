@@ -1,4 +1,5 @@
 - hosts: ubuntu20
   roles:
     - zsh
+    - vim
     - lxd
