@@ -11,16 +11,12 @@
     remote_src: yes
     src: /tmp/go.tar.gz
     dest: "{{ go_dir | dirname }}"
-- name: Add go to system PATH
-  become: yes
-  vars:
-    go_bin_dir: "{{ (go_dir, 'bin') | path_join }}"
-  # https://stackoverflow.com/a/56561538/5850658
+- name: Add go to PATH
   lineinfile:
-    path: /etc/environment
-    regexp: 'PATH=(["])((?!.*?{{ go_bin_dir }}).*?)(["])$'
-    line: 'PATH=\1\2:{{ go_bin_dir }}\3'
-    backrefs: yes
+    path: "{{ shell_env }}"
+    create: yes
+    line: export PATH="$PATH:{{ (go_dir, 'bin') | path_join }}"
+  when: shell_env is defined
 - name: Get GOPATH
   command:
     cmd: "{{ (go_dir, 'bin', 'go') | path_join }} env GOPATH"
@@ -28,10 +24,9 @@
 - name: Set go_path fact
   set_fact:
     go_path: gopath_result.stdout
-# - name: Add GOPATH bin to user path
-#   # https://stackoverflow.com/a/56561538/5850658
-#   lineinfile:
-#     path: ~/.profile
-#     regexp: 'PATH=(["])((?!.*?{{ go_bin_dir }}).*?)(["])$'
-#     line: 'PATH=\1\2:{{ go_bin_dir }}\3'
-#     backrefs: yes
+- name: Add GOPATH bin to user path
+  lineinfile:
+    path: "{{ shell_env }}"
+    create: yes
+    line: export PATH="$PATH:{{ (go_path, 'bin') | path_join }}"
+  when: shell_env is defined

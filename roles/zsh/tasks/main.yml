@@ -1,0 +1,36 @@
+---
+- name: Install zsh
+  become: yes
+  package:
+    name: zsh
+    state: present
+- name: Ensure ~/src exists
+  file:
+    path: ~/src
+    state: directory
+- name: Clone Oh My Zsh repo
+  git:
+    repo: https://github.com/ohmyzsh/ohmyzsh.git
+    dest: ~/src/ohmyzsh
+- name: Clone Zsh autosuggestions
+  git:
+    repo: https://github.com/zsh-users/zsh-autosuggestions.git
+    dest: ~/src/zsh-autosuggestions
+- name: Oh My Zsh setup
+  blockinfile:
+    path: ~/.zshrc
+    create: yes
+    insertbefore: BOF
+    marker_begin: ohmyzsh-setup-begin
+    marker_end: ohmyzsh-setup-end
+    block: |
+      export ZSH="$HOME/src/ohmyzsh"
+      ZSH_THEME="agnoster"
+      DEFAULT_USER="{{ ansible_user_id }}"
+      plugins=(git)
+      source $ZSH/oh-my-zsh.sh
+      source ~/src/zsh-autosuggestions/zsh-autosuggestions.zsh
+- name: Set shell_* startup file facts
+  set_fact:
+    shell_rc: ~/.zshrc
+    shell_env: ~/.zshenv
