@@ -24,15 +24,6 @@ fi
 
 export USER=$(logname)
 export HOME=/home/$USER
-SETUP_HOME="$(dirname $( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd ))"
-
-#########################
-######## Dotfiles #######
-#########################
-
-ln -s $SETUP_HOME/dotfiles/* $HOME/
-
-echo "export SETUP_HOME=$SETUP_HOME" > $HOME/.setup
 
 #########################
 #### Common Packages ####

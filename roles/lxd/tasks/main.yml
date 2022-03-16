@@ -50,6 +50,18 @@
     src: lxd.service.j2
     dest: /etc/systemd/system/lxd.service
   register: systemd_template_result
+- name: Create lxd group
+  become: yes
+  group:
+    name: lxd
+    state: present
+- name: User added to lxd group
+  become: yes
+  user:
+    name: "{{ ansible_user_id }}"
+    append: yes
+    groups:
+      - lxd
 - name: LXD service started
   become: yes
   systemd:
@@ -62,4 +74,4 @@
     cmd: |
       export LD_LIBRARY_PATH="$HOME/src/lxd-4.23/vendor/raft/.libs/:$HOME/src/lxd-4.23/vendor/dqlite/.libs/:$LD_LIBRARY_PATH"
       export PATH="$PATH:{{ go_path}}/bin"
-      lxd init --auto
+      lxd waitready -t 5 && lxd init --auto

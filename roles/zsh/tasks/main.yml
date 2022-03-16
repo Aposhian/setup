@@ -36,3 +36,8 @@
   user:
     name: "{{ ansible_user_id }}"
     shell: /usr/bin/zsh
+- name: Source site specific setup
+  lineinfile:
+    path: "{{ shell_rc }}"
+    line: '[ -s "$HOME/.setup" ] && source "$HOME/.setup"'
+    regexp: source.*\.setup

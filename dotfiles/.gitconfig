@@ -1,9 +1,0 @@
-[user]
-	name = "Adam Aposhian"
-  email = "aposhian.dev@gmail.com"
-[includeIf "gitdir:firefly/"]
-	path = firefly/.gitconfig
-[rebase]
-	autosquash = true
-[core]
-	editor = vim

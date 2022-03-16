@@ -1,9 +1,5 @@
 - hosts: localhost
   connection: local
   roles:
-    - ros2
-    - aws
-    - vscode
-    - firefox
-    - virtualbox
-    - go
+    - zsh
+    - lxd

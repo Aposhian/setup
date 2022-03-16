@@ -8,6 +8,11 @@
     name:
       - python3-rosdep
     state: present
+- name: System install of vcstool absent
+  become: yes
+  package:
+    name: python3-vcstool
+    state: absent
 - name: ROS extra user Python packages
   pip:
     name:
