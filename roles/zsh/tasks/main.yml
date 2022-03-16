@@ -16,6 +16,7 @@
   set_fact:
     shell_rc: ~/.zshrc
     shell_env: ~/.zshenv
+    shell_ext: zsh
 - name: Oh My Zsh setup
   blockinfile:
     path: "{{ shell_rc }}"
@@ -30,3 +31,8 @@
       plugins=(git)
       source $ZSH/oh-my-zsh.sh
       source ~/src/zsh-autosuggestions/zsh-autosuggestions.zsh
+- name: Change default shell to zsh
+  become: yes
+  user:
+    name: "{{ ansible_user_id }}"
+    shell: /usr/bin/zsh

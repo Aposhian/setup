@@ -1,17 +1,33 @@
 ---
 - name: Ensure ~/.local/bin exists
-  become: no
   file:
     path: ~/.local/bin
     state: directory
 - name: Download nvm installer
-  become: no
   get_url:
     url: https://raw.githubusercontent.com/nvm-sh/nvm/v{{ nvm_version }}/install.sh
     dest: ~/.local/bin/nvm-install.sh
     checksum: sha256:{{ nvm_installer_checksum }}
 - name: Install nvm
-  become: no
   command:
     cmd: bash ~/.local/bin/nvm-install.sh
     creates: ~/.nvm/nvm.sh
+- name: Install latest LTS node
+  shell:
+    cmd: |
+      export NVM_DIR="$HOME/.nvm"
+      [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+      nvm install --lts
+- name: Add nvm to shell rc
+  blockinfile:
+    path: "{{ shell_rc }}"
+    create: yes
+    insertbefore: BOF
+    marker_begin: nvm-begin
+    marker_end: nvm-end
+    block: |
+      export NVM_DIR="$HOME/.nvm"
+      [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+      [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+      source <(npm completion)
+  when: shell_rc is defined

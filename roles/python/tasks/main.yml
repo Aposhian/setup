@@ -1,0 +1,22 @@
+---
+- name: Ensure python and pip are installed
+  become: yes
+  package:
+    name:
+      - python3 # Maybe superfluous given that python is required already for ansible
+      - python3-pip
+- name: Ensure latest pip
+  pip:
+    name: pip
+    state: latest
+- name: Install common python packages
+  pip:
+    name:
+      - black
+      - numpy
+- name: Add local binaries to PATH
+  lineinfile:
+    path: "{{ shell_env }}"
+    create: yes
+    line: export PATH="$PATH:$HOME/.local/bin"
+  when: shell_env is defined

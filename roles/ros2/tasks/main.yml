@@ -2,14 +2,27 @@
 - name: Install ROS 2 for Ubuntu
   import_tasks: ubuntu.yml
   when: ansible_facts['os_family'] == 'Debian'
-- name: Ensure latest pip
-  pip:
-    name: pip
-    state: latest
-- name: Install argcomplete
-  pip:
-    name: argcomplete
+- name: rosdep installed
+  become: yes
+  package:
+    name:
+      - python3-rosdep
     state: present
+- name: ROS extra user Python packages
+  pip:
+    name:
+      - vcstool
+      - colcon-common-extensions
+      - argcomplete
+    state: present
+    extra_args: --user
+- name: Add vcstool autocompletion
+  lineinfile:
+    path: "{{ shell_rc }}"
+    create: yes
+    line: source $HOME/.local/share/vcstool-completion/vcs.{{ shell_ext }}
+    regexp: vcstool-completion/vcs
+  when: (shell_rc is defined) and (shell_ext is defined)
 - name: rosdep initialized
   become: yes
   command:
@@ -19,3 +32,31 @@
   become: no
   command:
     cmd: rosdep update
+- name: Set default ROS_DOMAIN_ID
+  lineinfile:
+    path: "{{ shell_env }}"
+    create: yes
+    regexp: export ROS_DOMAIN_ID=[0-9]+
+    line: export ROS_DOMAIN_ID={{ default_ros_domain_id }}
+  when: shell_env is defined
+- name: Set default RMW_IMPLEMENTATION
+  lineinfile:
+    path: "{{ shell_env }}"
+    create: yes
+    regexp: export RMW_IMPLEMENTATION=\s+
+    line: export ROS_DOMAIN_ID={{ default_rmw_implementation }}
+  when: shell_env is defined
+- name: Convience ROS sourcing function
+  blockinfile:
+    path: "{{ shell_rc }}"
+    create: yes
+    insertbefore: BOF
+    marker_begin: ros-begin
+    marker_end: ros-end
+    block: |
+      for ros_distro_dir in /opt/ros/*
+      do
+              ros_distro=$(basename $ros_distro_dir)
+              alias $ros_distro="source /opt/ros/$ros_distro/setup.zsh"
+      done
+  when: shell_rc is defined

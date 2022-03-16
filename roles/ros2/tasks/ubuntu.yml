@@ -18,29 +18,11 @@
     filename: ros2
     state: present
   become: yes
-- name: ros-base installed
+- name: Essential ROS packages installed
   apt:
-    name: ros-{{ ros_distro }}-ros-base
+    name:
+      - ros-{{ ros_distro }}-ros-base
+      - ros-{{ ros_distro }}-rmw-cyclonedds-cpp
     state: present
     update_cache: yes
-  become: yes
-- name: colcon extensions installed
-  apt:
-    name: python3-colcon-common-extensions
-    state: present
-  become: yes
-- name: rosdep installed
-  apt:
-    name: python3-rosdep
-    state: present
-  become: yes
-- name: vcstool installed
-  apt:
-    name: python3-vcstool
-    state: present
-  become: yes
-- name: pip installed
-  apt:
-    name: python3-pip
-    state: present
   become: yes

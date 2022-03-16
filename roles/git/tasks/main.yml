@@ -7,3 +7,9 @@
   copy:
     src: .gitconfig
     dest: ~/.gitconfig
+- name: Set GIT_PAGER
+  lineinfile:
+    path: "{{ shell_env }}"
+    create: yes
+    line: export GIT_PAGER=cat
+  when: shell_env is defined
