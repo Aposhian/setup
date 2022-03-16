@@ -1,0 +1,12 @@
+---
+- name: Install common desktop packages
+  package:
+    name:
+      - xclip
+      - fonts-hack
+      - gnome-tweaks
+      - terminator
+- name: Install terminator config
+  copy:
+    src: terminator-config.ini
+    dest: ~/.config/terminator/config

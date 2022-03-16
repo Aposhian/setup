@@ -1,0 +1,22 @@
+---
+- name: less alias
+  lineinfile:
+    path: "{{ shell_rc }}"
+    create: yes
+    line: alias less='less -R'
+    regexp: alias less=
+  when: shell_rc is defined
+- name: ls alias
+  lineinfile:
+    path: "{{ shell_rc }}"
+    create: yes
+    line: alias ls='ls -a --color=auto'
+    regexp: alias ls=
+  when: shell_rc is defined
+- name: xclip alias
+  lineinfile:
+    path: "{{ shell_rc }}"
+    create: yes
+    line: alias xc='xclip -selection clipboard'
+    regexp: alias xc=
+  when: shell_rc is defined
