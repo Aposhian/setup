@@ -49,7 +49,7 @@
     path: "{{ shell_env }}"
     create: yes
     regexp: export RMW_IMPLEMENTATION=\s+
-    line: export ROS_DOMAIN_ID={{ default_rmw_implementation }}
+    line: export RMW_IMPLEMENTATION={{ default_rmw_implementation }}
   when: shell_env is defined
 - name: Convience ROS sourcing function
   blockinfile:
