@@ -1,0 +1,18 @@
+---
+- name: Ruby installed
+  become: yes
+  package:
+    name: ruby
+- name: Gems added to PATH
+  lineinfile:
+    path: "{{ shell_env }}"
+    create: yes
+    line: export PATH="$PATH:$HOME/gems/bin"
+  when: shell_env is defined
+- name: GEM_HOME set
+  lineinfile:
+    path: "{{ shell_env }}"
+    create: yes
+    line: export GEM_HOME="$HOME/gems"
+    regexp: export GEM_HOME=
+  when: shell_env is defined
