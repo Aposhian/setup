@@ -1,7 +1,7 @@
 ---
 - name: Download steam.deb
   get_url:
-    url: https://media.steampowered.com/client/installer/steam.deb
+    url: https://cdn.cloudflare.steamstatic.com/client/installer/steam.deb
     dest: /tmp/steam.deb
 - name: Install steam
   become: yes

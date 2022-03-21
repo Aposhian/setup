@@ -1,11 +1,11 @@
 ---
-# https://docs.ros.org/en/galactic/Installation/Ubuntu-Install-Debians.html
-- name: Download steam.rpm
-  get_url:
-    url: https://media.steampowered.com/client/installer/steam.rpm
-    dest: /tmp/steam.rpm
+- name: Enable RPM Fusion
+  become: yes
+  dnf:
+    name: https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-{{ansible_distribution_major_version}}.noarch.rpm
+    state: present
 - name: Install steam
   become: yes
-  yum:
-    name: /tmp/steam.rpm
+  dnf:
+    name: steam
     state: present
