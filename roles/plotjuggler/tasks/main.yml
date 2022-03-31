@@ -11,6 +11,7 @@
   git:
     repo: https://github.com/PlotJuggler/plotjuggler-ros-plugins.git
     dest: "{{ plotjuggler_workspace }}/src/plotjuggler-ros-plugins"
+    version: galactic
 - name: Clone plotjuggler msgs
   git:
     repo: https://github.com/PlotJuggler/plotjuggler_msgs.git
@@ -22,6 +23,11 @@
     cmd: |
       . /opt/ros/{{ ros_distro }}/setup.sh
       rosdep install --from-paths src --ignore-src --rosdistro={{ ros_distro }} -y
+- name: Extra dependencies
+  become: yes
+  package:
+    name: libiberty-dev
+  state: present
 - name: Build
   shell:
     chdir: "{{ plotjuggler_workspace }}"
