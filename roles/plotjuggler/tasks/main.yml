@@ -1,58 +1,30 @@
 ---
-- name: Create plotjuggler ws
+- name: Create plotjuggler workspace
   file:
-    path: ~/src/plotjuggler_ws
+    path: "{{ plotjuggler_workspace }}/src"
     state: directory
 - name: Clone plotjuggler repo
   git:
     repo: https://github.com/facontidavide/PlotJuggler.git
-    dest: ~/src/plotjuggler_ws/plotjuggler
+    dest: "{{ plotjuggler_workspace }}/src/plotjuggler"
 - name: Clone plotjuggler ros plugins repo
   git:
-    repo: https://github.com/facontidavide/PlotJuggler.git
-    dest: ~/src/plotjuggler_ws/plotjuggler-ros-plugins
-- name: Install debian dependencies
+    repo: https://github.com/PlotJuggler/plotjuggler-ros-plugins.git
+    dest: "{{ plotjuggler_workspace }}/src/plotjuggler-ros-plugins"
+- name: Clone plotjuggler msgs
+  git:
+    repo: https://github.com/PlotJuggler/plotjuggler_msgs.git
+    dest: "{{ plotjuggler_workspace }}/src/plotjuggler_msgs"
+- name: Install dependencies
   become: yes
-  apt:
-    name:
-      - qtbase5-dev
-      - libqt5svg5-dev
-      - libqt5websockets5-dev
-      - libqt5opengl5-dev
-      - libqt5x11extras5-dev
-      - libprotoc-dev
-      - libiberty-dev
-  state: present
-  when: ansible_facts['os_family'] == 'Debian'
-- name: Install fedora dependencies
-  become: yes
-  dnf:
-    name:
-    - qt5-qtbase-devel
-    - qt5-qtsvg-devel 
-    - qt5-websockets-devel 
-    - qt5-qtopendl-devel
-    - qt5-qtx11extras-devel
-  state: present
-  when: ansible_facts['os_family'] == 'RedHat'
-- name: Create build directory
-  file:
-    path: ~/src/plotjuggler/build
-    state: directory
-- name: Configure with cmake
-  command:
-    chdir: ~/src/plotjuggler/build
-    cmd: cmake ..
-    creates: ./Makefile
+  shell:
+    chdir: "{{ plotjuggler_workspace }}"
+    cmd: |
+      . /opt/ros/{{ ros_distro }}/setup.sh
+      rosdep install --from-paths src --ignore-src --rosdistro={{ ros_distro }} -y
 - name: Build
-  command:
-    chdir: ~/src/plotjuggler/build
-    cmd: make
-    creates: ./src/bluetoothd
-- name: Install plotjuggler
-  become: yes
-  command:
-    chdir: ~/src/plotjuggler/build
-    cmd: make install
-    creates: /usr/local/libexec/bluetooth/bluetoothd
-  register: bluez_installed
+  shell:
+    chdir: "{{ plotjuggler_workspace }}"
+    cmd: |
+      . /opt/ros/{{ ros_distro }}/setup.sh
+      colcon build --symlink-install
