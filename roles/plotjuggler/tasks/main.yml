@@ -26,6 +26,7 @@
 - name: Extra dependencies
   become: yes
   package:
+    # This is needed because building gdb from source adds statically-linked bfd
     name: libiberty-dev
   state: present
 - name: Build
