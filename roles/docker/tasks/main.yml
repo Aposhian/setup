@@ -37,3 +37,8 @@
     state: present
     update_cache: yes
   become: yes
+- name: Docker service disabled (use socket activation)
+  become: yes
+  systemd:
+    name: docker.service
+    enabled: no
