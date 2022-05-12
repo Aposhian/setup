@@ -12,12 +12,30 @@
   command:
     cmd: bash ~/.local/bin/nvm-install.sh
     creates: ~/.nvm/nvm.sh
-- name: Install latest LTS node
+- name: Register latest LTS node version from codename
   shell:
     cmd: |
       export NVM_DIR="$HOME/.nvm"
       [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-      nvm install --lts
+      nvm ls-remote --lts=Gallium --no-colors | tail -1 | awk '{ print $2 }'
+  register: node_lts_version_cmd
+- name: Set node_version fact
+  set_fact:
+    node_version: "{{ node_lts_version_cmd.stdout }}"
+- debug:
+    var: node_version
+- name: Install LTS nodejs
+  shell:
+    cmd: |
+      export NVM_DIR="$HOME/.nvm"
+      [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+      nvm install --lts={{ node_lts_codename }}
+    creates: "{{ ansible_env.HOME }}/.nvm/versions/node/{{ node_version }}"
+- name: Set default node alias
+  copy:
+    content: "{{ node_version }}"
+    dest: "{{ ansible_env.HOME }}/.nvm/alias/default"
+    mode: o=rw,g=rw,u=r
 - name: Add nvm to shell rc
   blockinfile:
     path: "{{ shell_rc }}"
