@@ -1,0 +1,13 @@
+---
+- name: Install Fedora dependencies
+  become: yes
+  apt:
+    name:
+      - re2c
+      - bison
+      - autoconf
+      - make
+      - libtool
+      - ccache
+      - libxml2-devel
+      - sqlite-devel

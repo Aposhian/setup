@@ -1,0 +1,36 @@
+---
+- import_tasks: debian.yml
+  when: ansible_facts['os_family'] == 'Debian'
+- import_tasks: redhat.yml
+  when: ansible_facts['os_family'] == 'Redhat'
+- name: Download PHP source
+  get_url:
+    url: https://www.php.net/distributions/php-{{ php_version }}.tar.xz
+    checksum: "{{ php_checksum }}"
+    dest: ~/src/php-{{ php_version }}.tar.xz
+- name: Extract PHP source
+  unarchive:
+    remote_src: yes
+    src: ~/src/php-{{ php_version }}.tar.xz
+    dest: ~/src/
+- name: Generate configure
+  command:
+    chdir: ~/src/php-{{ php_version }}
+    cmd: ./buildconf
+    creates: ~/src/php-{{ php_version }}/configure
+- name: Configure PHP
+  command:
+    chdir: ~/src/php-{{ php_version }}
+    cmd: ./configure
+    creates: ~/src/php-{{ php_version }}/Makefile
+- name: Build PHP
+  shell:
+    chdir: ~/src/php-{{ php_version }}
+    cmd: make -j$(nproc)
+    creates: ~/src/php-{{ php_version }}/php
+- name: Install PHP
+  become: yes
+  command:
+    chdir: "{{ansible_env.HOME }}/src/php-{{ php_version }}"
+    cmd: make install
+    creates: /usr/local/bin/php
