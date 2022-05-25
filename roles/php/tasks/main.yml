@@ -27,10 +27,21 @@
   shell:
     chdir: ~/src/php-{{ php_version }}
     cmd: make -j$(nproc)
-    creates: ~/src/php-{{ php_version }}/php
+    # TODO: figure out what this creates
 - name: Install PHP
   become: yes
   command:
     chdir: "{{ansible_env.HOME }}/src/php-{{ php_version }}"
     cmd: make install
     creates: /usr/local/bin/php
+- name: Install Composer
+  shell:
+    # https://getcomposer.org/doc/faqs/how-to-install-composer-programmatically.md
+    cmd: wget https://raw.githubusercontent.com/composer/getcomposer.org/76a7060ccb93902cd7576b67264ad91c8a2700e2/web/installer -O - -q | php -- --quiet
+    creates: composer.phar
+- name: Install composer globally
+  become: yes
+  copy:
+    remote_src: yes
+    src: composer.phar
+    dest: /usr/local/bin/composer
