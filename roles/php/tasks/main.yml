@@ -21,7 +21,7 @@
 - name: Configure PHP
   command:
     chdir: ~/src/php-{{ php_version }}
-    cmd: ./configure
+    cmd: ./configure --with-openssl --with-zlib --with-curl
     creates: ~/src/php-{{ php_version }}/Makefile
 - name: Build PHP
   shell:
