@@ -1,5 +1,6 @@
 ---
 - name: Install Vim binary
+  become: yes
   package:
     name: vim
     state: present
@@ -18,4 +19,5 @@
   lineinfile:
     path: "{{ shell_env }}"
     line: export EDITOR=vim
+    create: yes
   when: shell_env is defined

@@ -4,6 +4,11 @@
   package:
     name: zsh
     state: present
+- name: Ensure git is present
+  become: yes
+  package:
+    name: git
+    state: present
 - name: Clone Oh My Zsh repo
   git:
     repo: https://github.com/ohmyzsh/ohmyzsh.git

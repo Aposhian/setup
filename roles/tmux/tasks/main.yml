@@ -1,5 +1,6 @@
 ---
 - name: Install tmux binary
+  become: yes
   package:
     name: tmux
     state: present
