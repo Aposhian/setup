@@ -1,0 +1,18 @@
+---
+- name: Set default target to non-graphical
+  become: yes
+  file:
+    src: /usr/lib/systemd/system/multi-user.target
+    dest: /etc/systemd/system/default.target
+    state: link
+- name: Ensure ssh service is enabled on boot
+  become: yes
+  systemd:
+    name: sshd
+    enabled: yes
+- name: Ensure laptop doesn't power off when closed
+  become: yes
+  lineinfile:
+    path: /etc/systemd/logind.conf
+    search_string: HandleLidSwitchExternalPower
+    line: HandleLidSwitchExternalPower=ignore
