@@ -10,7 +10,7 @@
   lineinfile:
     path: "{{ shell_rc }}"
     create: yes
-    line: alias ls='ls -a --color=auto'
+    line: alias ls='ls -ah --color=auto'
     regexp: alias ls=
   when: shell_rc is defined
 - name: xclip alias
