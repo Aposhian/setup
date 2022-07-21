@@ -1,0 +1,5 @@
+---
+- name: Create downloads directory
+  ansible.builtin.file:
+    path: "{{ downloads_dir }}"
+    state: directory

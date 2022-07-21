@@ -1,8 +1,25 @@
 ---
-- name: Install Bitwarden CLI
-  shell:
-    cmd: |
-      export NVM_DIR="$HOME/.nvm"
-      [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-      npm install -g @bitwarden/cli
-    creates: "{{ ansible_env.HOME }}/.nvm/versions/node/{{ node_version }}/lib/node_modules/@bitwarden/cli/package.json"
+- name: Download bitwarden CLI
+  ansible.builtin.get_url:
+    url: https://github.com/bitwarden/clients/releases/download/cli-v{{ bitwarden_version }}/bw-linux-{{ bitwarden_version }}.zip
+    checksum: "{{ bitwarden_checksum }}"
+    dest: "{{ downloads_dir }}/bw.zip"
+- name: Unzip support installed
+  become: yes
+  ansible.builtin.package:
+    name: unzip
+    state: present
+- name: Extract bitwarden
+  become: yes
+  ansible.builtin.unarchive:
+    src: "{{ downloads_dir }}/bw.zip"
+    dest: /usr/local/bin/
+    creates: /usr/local/bin/bw
+    owner: root
+- name: Set permissions on bw CLI
+  become: yes
+  ansible.builtin.file:
+    path: /usr/local/bin/bw
+    mode: 755
+    owner: root
+    state: file
