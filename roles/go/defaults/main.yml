@@ -1,4 +1,4 @@
 # From https://go.dev/dl/
-go_version: 1.17.7
-go_checksum: 02b111284bedbfa35a7e5b74a06082d18632eff824fd144312f6063943d49259
+go_version: 1.19.2
+go_checksum: sha256:5e8c5a74fe6470dd7e055a461acda8bb4050ead8c2df70f227e3ff7d8eb7eeb6
 go_dir: /usr/local/go

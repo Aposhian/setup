@@ -1,13 +1,12 @@
 ---
 - name: Download go
   get_url:
-    checksum: sha256:{{ go_checksum }}
+    checksum: "{{ go_checksum }}"
     dest: /tmp/go.tar.gz
     url: https://go.dev/dl/go{{ go_version }}.linux-{{ deb_architecture }}.tar.gz
 - name: Extract go
   become: yes
   unarchive:
-    creates: "{{ go_dir }}"
     remote_src: yes
     src: /tmp/go.tar.gz
     dest: "{{ go_dir | dirname }}"
