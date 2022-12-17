@@ -7,7 +7,11 @@
       - fonts-hack
       - gnome-tweaks
       - terminator
+- name: Make terminator config directory
+  file:
+    path: "{{ ansible_env.HOME }}/.config/terminator"
+    state: directory
 - name: Install terminator config
   copy:
     src: terminator-config.ini
-    dest: ~/.config/terminator/config
+    dest: "{{ ansible_env.HOME }}/.config/terminator/config"
