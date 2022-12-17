@@ -2,4 +2,12 @@
   connection: local
   roles:
     - zsh
-    - lxd
+    - git
+    - vim
+    - python
+    - desktop
+    - firefox
+    - virtualbox
+    - docker
+    - aws
+    - bitwarden
