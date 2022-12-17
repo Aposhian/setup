@@ -12,3 +12,5 @@
     - docker
     - aws
     - bitwarden
+    - nodejs
+    - ros2
