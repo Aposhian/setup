@@ -15,3 +15,6 @@
   copy:
     src: terminator-config.ini
     dest: "{{ ansible_env.HOME }}/.config/terminator/config"
+- name: Make terminator default terminal
+  command:
+    cmd: gsettings set org.gnome.desktop.default-applications.terminal exec 'terminator'
