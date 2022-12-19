@@ -42,3 +42,16 @@
   systemd:
     name: docker.service
     enabled: no
+- name: Docker group created
+  become: yes
+  ansible.builtin.group:
+    name: docker
+    state: present
+- name: User added to docker group
+  become: yes
+  ansible.builtin.user:
+    name: "{{ ansible_user_id }}"
+    # Add the docker group to existing groups
+    append: yes
+    groups:
+      - docker
