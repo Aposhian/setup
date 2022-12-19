@@ -20,6 +20,6 @@
   become: yes
   ansible.builtin.file:
     path: /usr/local/bin/bw
-    mode: 755
+    mode: 0755
     owner: root
     state: file
